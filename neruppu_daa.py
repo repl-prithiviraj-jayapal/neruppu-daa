@@ -11,6 +11,12 @@ from dataclasses import dataclass
 from typing import List
 from enum import Enum
 from pynput import keyboard
+try:
+    import pygame
+    SOUND_ENABLED = True
+except ImportError:
+    SOUND_ENABLED = False
+    print("pygame not found - game will run without sound")
 
 # ANSI Colors (same as pynput test)
 class Colors:
@@ -60,6 +66,9 @@ class NeruppuDaaGame:
         self.game_state = GameState.MENU
         self.frame_count = 0
         
+        # Initialize audio system
+        self.init_audio()
+        
         # Power-up effects
         self.double_points = False
         self.double_points_timer = 0
@@ -80,6 +89,128 @@ class NeruppuDaaGame:
             on_release=self.on_key_release
         )
         self.listener.start()
+    
+    def init_audio(self):
+        """Initialize pygame audio system"""
+        global SOUND_ENABLED
+        if not SOUND_ENABLED:
+            return
+        
+        try:
+            pygame.mixer.init(frequency=22050, size=-16, channels=2, buffer=512)
+            self.create_sound_effects()
+        except:
+            SOUND_ENABLED = False
+            print("Failed to initialize audio - running without sound")
+    
+    def create_sound_effects(self):
+        """Create simple sound effects using pygame"""
+        global SOUND_ENABLED
+        if not SOUND_ENABLED:
+            return
+        
+        try:
+            import numpy as np
+            
+            # Power-up sound (bright ascending arpeggio)
+            duration = 0.4
+            sample_rate = 22050
+            t = np.linspace(0, duration, int(sample_rate * duration), False)
+            
+            # Create an ascending arpeggio with sparkle effect
+            freq1 = 523  # C5
+            freq2 = 659  # E5  
+            freq3 = 784  # G5
+            freq4 = 1047 # C6
+            
+            # Create ascending notes with different timing
+            note1 = np.sin(freq1 * 2 * np.pi * t) * 0.3 * np.exp(-8*t)
+            note2 = np.sin(freq2 * 2 * np.pi * t) * 0.3 * np.exp(-6*(t-0.1)) * (t > 0.1)
+            note3 = np.sin(freq3 * 2 * np.pi * t) * 0.3 * np.exp(-4*(t-0.2)) * (t > 0.2)
+            note4 = np.sin(freq4 * 2 * np.pi * t) * 0.2 * np.exp(-2*(t-0.3)) * (t > 0.3)
+            
+            power_up_wave = note1 + note2 + note3 + note4
+            power_up_wave = (power_up_wave * 32767).astype(np.int16)
+            stereo_wave = np.column_stack([power_up_wave, power_up_wave])
+            stereo_wave = np.ascontiguousarray(stereo_wave)
+            self.power_up_sound = pygame.sndarray.make_sound(stereo_wave)
+            
+            # Hit sound (harsh low tone with decay)
+            hit_wave = np.sin(150 * 2 * np.pi * t) * 0.6 * np.exp(-2*t)
+            hit_wave = (hit_wave * 32767).astype(np.int16)  
+            stereo_hit = np.column_stack([hit_wave, hit_wave])
+            stereo_hit = np.ascontiguousarray(stereo_hit)
+            self.hit_sound = pygame.sndarray.make_sound(stereo_hit)
+            
+            
+            # Movement sound (quick blip)
+            move_duration = 0.1
+            move_t = np.linspace(0, move_duration, int(sample_rate * move_duration), False)
+            move_wave = np.sin(800 * 2 * np.pi * move_t) * 0.2 * np.exp(-5*move_t)
+            move_wave = (move_wave * 32767).astype(np.int16)
+            stereo_move = np.column_stack([move_wave, move_wave])
+            stereo_move = np.ascontiguousarray(stereo_move)
+            self.move_sound = pygame.sndarray.make_sound(stereo_move)
+            
+            # Game over sound (epic failure chord progression)
+            gameover_duration = 1.2
+            gameover_t = np.linspace(0, gameover_duration, int(sample_rate * gameover_duration), False)
+            
+            # Create a dramatic minor chord progression that descends
+            # First chord (Am) - dark and ominous
+            chord1_freq = [220, 261, 329]  # A3, C4, E4
+            # Second chord (Dm) - even darker  
+            chord2_freq = [146, 174, 220]  # D3, F3, A3
+            # Final chord (low rumble)
+            final_freq = [87, 110]  # F2, A2
+            
+            # Build the progression
+            chord1 = sum(np.sin(f * 2 * np.pi * gameover_t) * 0.3 * np.exp(-3*gameover_t) * (gameover_t < 0.4) for f in chord1_freq)
+            chord2 = sum(np.sin(f * 2 * np.pi * gameover_t) * 0.4 * np.exp(-2*(gameover_t-0.4)) * ((gameover_t >= 0.4) & (gameover_t < 0.8)) for f in chord2_freq)  
+            final = sum(np.sin(f * 2 * np.pi * gameover_t) * 0.5 * np.exp(-1*(gameover_t-0.8)) * (gameover_t >= 0.8) for f in final_freq)
+            
+            gameover_wave = chord1 + chord2 + final
+            gameover_wave = (gameover_wave * 32767).astype(np.int16)
+            stereo_gameover = np.column_stack([gameover_wave, gameover_wave])
+            stereo_gameover = np.ascontiguousarray(stereo_gameover)
+            self.gameover_sound = pygame.sndarray.make_sound(stereo_gameover)
+            
+            print("🎵 Audio system initialized successfully!")
+            
+        except Exception as e:
+            SOUND_ENABLED = False
+            print(f"Failed to create sound effects: {e}")
+            print("Game will run without sound")
+        
+    def play_sound(self, sound_type):
+        """Play sound effect"""
+        if not SOUND_ENABLED:
+            return
+            
+        try:
+            if sound_type == 'power_up' and hasattr(self, 'power_up_sound'):
+                self.power_up_sound.play()
+                print("🎵 Power-up sound!")
+            elif sound_type == 'hit' and hasattr(self, 'hit_sound'):
+                self.hit_sound.play()
+                print("💥 Hit sound!")
+            elif sound_type == 'move' and hasattr(self, 'move_sound'):
+                self.move_sound.play()
+            elif sound_type == 'gameover' and hasattr(self, 'gameover_sound'):
+                self.gameover_sound.play()
+                print("💀 Game over sound!")
+                
+        except Exception as e:
+            print(f"Audio playback error: {e}")
+            # Fallback to system beep for macOS
+            try:
+                import subprocess
+                if sound_type == 'power_up':
+                    subprocess.run(['osascript', '-e', 'beep 2'], check=False)
+                elif sound_type == 'hit':
+                    subprocess.run(['osascript', '-e', 'beep 1'], check=False)
+            except:
+                pass
     
     def on_key_press(self, key):
         """Handle key press events (same as pynput test)"""
@@ -143,8 +274,8 @@ class NeruppuDaaGame:
         # Progressive difficulty - more fire & brimstone and faster as time goes on
         time_factor = min(self.frame_count / 300.0, 3.0)  # Increases over 30 seconds, caps at 3x
         
-        # Spawn rate increases with time (starts at 60%, up to 85%)
-        spawn_rate = 0.6 + (time_factor * 0.25)
+        # Spawn rate increases with time (starts at 70%, up to 97%)
+        spawn_rate = 0.70 + (time_factor * 0.27)
         
         if random.random() < spawn_rate:
             # Fire and brimstone symbols
@@ -163,7 +294,7 @@ class NeruppuDaaGame:
     
     def spawn_power_up(self):
         """Spawn power-ups occasionally"""
-        if random.random() < 0.02:  # 2% chance
+        if random.random() < 0.04:  # 4% chance
             power_types = {
                 '*': 'double_points',
                 '+': 'extra_life', 
@@ -208,7 +339,10 @@ class NeruppuDaaGame:
                     self.lives -= 1
                     if self.lives <= 0:
                         self.game_state = GameState.GAME_OVER
+                        self.play_sound('gameover')
                 
+                # Play hit sound effect
+                self.play_sound('hit')
                 self.fire_brimstone.remove(drop)
                 return
         
@@ -222,6 +356,9 @@ class NeruppuDaaGame:
     
     def collect_power_up(self, power_up: PowerUp):
         """Apply power-up effects"""
+        # Play power-up sound effect
+        self.play_sound('power_up')
+        
         if power_up.type == 'double_points':
             self.double_points = True
             self.double_points_timer = 180
@@ -252,6 +389,7 @@ class NeruppuDaaGame:
     def handle_input(self):
         """Handle keyboard input using pynput (same patterns as test)"""
         # Movement keys (can be held)
+        old_x = self.player_pos.x
         if self.is_pressed('a') or self.is_pressed('left'):
             if self.game_state == GameState.PLAYING and self.player_pos.x > 1:
                 self.player_pos.x -= 2
@@ -259,6 +397,10 @@ class NeruppuDaaGame:
         if self.is_pressed('d') or self.is_pressed('right'):
             if self.game_state == GameState.PLAYING and self.player_pos.x < self.width - 2:
                 self.player_pos.x += 2
+        
+        # Play movement sound if player moved
+        if self.game_state == GameState.PLAYING and old_x != self.player_pos.x:
+            self.play_sound('move')
         
         # Action keys with debouncing (same as pynput test)
         if self.is_pressed('space'):
@@ -282,8 +424,8 @@ class NeruppuDaaGame:
         """Draw the game screen"""
         self.clear_screen()
         
-        # Create game field
-        field = [[' ' for _ in range(self.width)] for _ in range(self.height)]
+        # Create clean game field
+        field = [[' ' for x in range(self.width)] for y in range(self.height)]
         
         # Draw fire & brimstone
         for drop in self.fire_brimstone:

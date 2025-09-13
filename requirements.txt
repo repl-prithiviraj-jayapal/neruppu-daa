@@ -3,9 +3,13 @@
 #
 # Dependencies:
 pynput>=1.7.0
+pygame>=2.0.0
+numpy>=1.19.0
 #
 # Installation:
-# pip install pynput
+# pip install pynput pygame numpy
+# OR
+# pip install -r requirements.txt
 # 
 # Minimum Python version: 3.6+
 #

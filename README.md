@@ -13,6 +13,7 @@ An addictive terminal-based survival game built with Python! Dodge falling fire 
 - **High Score Tracking** - Compete against your best runs
 - **Cross-Platform** - Works on Windows, macOS, and Linux
 - **Reliable Controls** - Built with pynput for smooth gameplay
+- **Dynamic Audio** - Background music and sound effects enhance the experience
 
 ## 🚀 Quick Start
 
@@ -26,14 +27,14 @@ An addictive terminal-based survival game built with Python! Dodge falling fire 
 ```bash
 git clone https://github.com/repl-prithiviraj-jayapal/neruppu-daa.git
 cd neruppu-daa
-pip install pynput
+pip install -r requirements.txt
 python3 neruppu_daa.py
 ```
 
 #### Option 2: Direct Download
 ```bash
 # Download neruppu_daa.py to any folder
-pip install pynput
+pip install pynput pygame numpy
 python3 neruppu_daa.py
 ```
 
@@ -41,23 +42,23 @@ python3 neruppu_daa.py
 
 #### 🪟 Windows
 ```cmd
-pip install pynput
+pip install pynput pygame numpy
 python neruppu_daa.py
 ```
 
 #### 🍎 macOS
 ```bash
-pip3 install pynput
+pip3 install pynput pygame numpy
 python3 neruppu_daa.py
 ```
 
 #### 🐧 Linux
 ```bash
-pip3 install pynput
+pip3 install pynput pygame numpy
 python3 neruppu_daa.py
 ```
 
-**That's it!** Just install pynput and you're ready to survive the inferno! 🔥
+**That's it!** Just install the dependencies and you're ready to survive the inferno with full audio! 🔥🎵
 
 ## 🕹️ How to Play
 
@@ -150,8 +151,13 @@ Current categories:
 
 ### Game doesn't start
 - Ensure Python 3.6+ is installed: `python3 --version`
-- Install pynput: `pip install pynput`
+- Install dependencies: `pip install pynput pygame numpy`
 - Try: `python neruppu_daa.py` (without the 3)
+
+### No sound/audio issues
+- Game will run without sound if pygame/numpy aren't installed
+- Install audio dependencies: `pip install pygame numpy`
+- Audio automatically disabled if installation fails
 
 ### Keys don't work
 - Make sure terminal window has focus
