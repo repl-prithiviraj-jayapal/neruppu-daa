@@ -1,0 +1,22 @@
+# NERUPPU DAA - Requirements
+# Fire Stone Survival Game
+#
+# Dependencies:
+pynput>=1.7.0
+#
+# Installation:
+# pip install pynput
+# 
+# Minimum Python version: 3.6+
+#
+# To check your Python version:
+#   python3 --version
+# 
+# The game works on:
+#   - Windows 10/11
+#   - macOS 10.14+  
+#   - Linux (any modern distribution)
+#   - Any system with Python 3.6+
+#
+# To run the game:
+#   python3 neruppu_daa.py
