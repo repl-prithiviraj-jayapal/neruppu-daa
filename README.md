@@ -24,8 +24,8 @@ An addictive terminal-based survival game built with Python! Dodge falling fire 
 
 #### Option 1: Git Clone (Recommended)
 ```bash
-git clone <your-repo-url>
-cd ASCII
+git clone https://github.com/repl-prithiviraj-jayapal/neruppu-daa.git
+cd neruppu-daa
 pip install pynput
 python3 neruppu_daa.py
 ```
