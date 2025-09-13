@@ -1,6 +1,6 @@
 # 🔥 NERUPPU DAA - Survive the Fire Stones!
 
-An addictive terminal-based survival game built with Python! Dodge falling fire stones, collect power-ups, and compete for high scores in this colorful ASCII adventure featuring authentic Tamil branding.
+An addictive terminal-based survival game built with Python! Dodge falling fire stones, collect power-ups, and compete for high scores in this colorful ASCII adventure.
 
 ![Game Preview](https://img.shields.io/badge/Python-3.6%2B-blue) ![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey) ![License](https://img.shields.io/badge/License-MIT-green)
 
@@ -68,7 +68,7 @@ python3 neruppu_daa.py
 - **R** - Restart after game over
 
 ### Objective
-**NERUPPU DAA** (Tamil for "Fire!") is a hardcore survival game where you dodge falling fire stones (`o`, `O`, `^`, `v`, `x`, `%`, `&`, `~`) and survive as long as possible while collecting blue power-ups!
+**NERUPPU DAA** is a hardcore survival game where you dodge falling fire stones (`o`, `O`, `^`, `v`, `x`, `%`, `&`, `~`) and survive as long as possible while collecting blue power-ups!
 
 ### Power-ups
 | Symbol | Effect | Duration |
@@ -104,16 +104,16 @@ A/D or ←/→ to Move | Q=Quit
 
 ## 🎯 About NERUPPU DAA
 
-**"Neruppu Daa"** is Tamil for "Fire!" - perfectly capturing the intense, fiery challenge of this hardcore survival game. The game combines:
+**NERUPPU DAA** is an intense, fiery challenge in this hardcore survival game. The game combines:
 
-- **Cultural Flair**: Unique Tamil name with universal English gameplay
+- **Unique Gameplay**: Fast-paced fire stone dodging action
 - **Hardcore Challenge**: One life only - every move counts!
 - **Progressive Difficulty**: The longer you survive, the faster the fire stones fall
 - **Fire & Brimstone Theme**: Dodge deadly falling fire stones from above
 
 ## 🌟 What Makes This Special
 
-- **Unique Branding**: Tamil name "Neruppu Daa" with English subtitle for accessibility
+- **Unique Title**: Memorable game name with clear gameplay description
 - **Hardcore Mode**: Unlike typical games with multiple lives, this is pure survival
 - **Reliable Input**: Built with pynput library for consistent keyboard handling across platforms
 - **Progressive Challenge**: Difficulty scales dynamically based on survival time
@@ -180,12 +180,10 @@ MIT License - Feel free to use, modify, and distribute!
 
 ## 🎪 About
 
-**NERUPPU DAA** was created as an original terminal-based survival game, combining authentic Tamil cultural elements with hardcore gaming mechanics. The Tamil name "Neruppu Daa" (meaning "Fire!") reflects the intense, fiery challenge players face while remaining accessible to global audiences through the English subtitle "Survive the Fire Stones."
+**NERUPPU DAA** was created as an original terminal-based survival game with hardcore gaming mechanics. The name reflects the intense, fiery challenge players face in this action-packed ASCII adventure.
 
-Perfect example of how modern development tools can create engaging, culturally-rich gaming experiences that work across all platforms!
+Perfect example of how modern development tools can create engaging gaming experiences that work across all platforms!
 
 ---
 
-**Ready to survive the inferno?** 🔥 Run `python3 neruppu_daa.py` and start dodging those fire stones! 
-
-**नेरुप्पु दा!** (That's Fire! in Tamil) 🔥🎮
+**Ready to survive the inferno?** 🔥 Run `python3 neruppu_daa.py` and start dodging those fire stones!
